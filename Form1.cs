@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Calculator
@@ -45,7 +40,7 @@ namespace Calculator
 		string delims = "+-*/^().,";
 		void exprTextBox_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == (int) Keys.Enter)
+			if (e.KeyChar == (int)Keys.Enter)
 			{
 				resTextBox.Text = calc.Evaluate(exprTextBox.Text).ToString();
 				e.KeyChar = '\0';
@@ -53,7 +48,7 @@ namespace Calculator
 				return;
 			}
 
-			if (e.KeyChar == (int) Keys.Back)
+			if (e.KeyChar == (int)Keys.Back)
 			{
 				if (exprBuilder.Length != 0)
 					exprBuilder.Length--;

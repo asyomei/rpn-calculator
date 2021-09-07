@@ -2,99 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 using System.Threading.Tasks;
-
-/*
- * math_opers = ['+', '-', '*', '/', '^', '(', ')']
-
-def rpn(expr):
-  expr = parse(expr)
-  main = []
-  opers = []
-  for token in expr:
-	if token not in math_opers:
-	  main += [token]
-	  continue
-	if len(opers) == 0 or token == '(':
-	  opers = [token] + opers
-	  continue
-	if token == ')':
-	  while True:
-		poped = opers[0]
-		opers = opers[1:]
-		if poped == '(':
-		  break
-		main += [poped]
-	  continue
-	if prty(opers[0]) < prty(token) or \
-	 token == '^' and opers[0] == '^':
-	  opers = [token] + opers
-	  continue
-	while True:
-	  if len(opers) == 0: break
-	  poped = opers[0]
-	  opers = opers[1:]
-	  main += [poped]
-	  if prty(poped) == prty(token):
-		break
-	opers = [token] + opers
-  while len(opers) != 0:
-	poped = opers[0]
-	opers = opers[1:]
-	main += [poped]
-  return main
-
-def prty(c):
-  if c in '+-': return 1
-  if c in '* /': return 2
-  if c in '^': return 3
-  return 0
-
-def parse(expr):
-  main = []
-  num = ""
-  for c in expr:
-	if c == ' ':
-	  continue
-	if c not in math_opers or \
-	 c == '-' and len(num) == 0:
-	  num += c
-	  continue
-	if len(num) != 0:
-	  main += [num]
-	  num = ""
-	main += [c]
-  if len(num) != 0:
-	main += [num]
-  return main
-
-s = "(99 + 23) - (123 + 69) - (12 + 55)"
-print '|'.join(parse(s))
-print
-print '|'.join(rpn(s))
-
- */
 
 namespace Calculator
 {
 	class Calculator
 	{
-		string[] unary_funcs = { "sin", "cos", "tg", "ctg", "abs" };
-		string[] binary_funcs = { "min", "max" };
-		string[] ternary_funcs = { };
-
-		int GetFuncArgsLength(string funcName)
-		{
-			if (unary_funcs.Contains(funcName))
-				return 1;
-			if (binary_funcs.Contains(funcName))
-				return 2;
-			if (ternary_funcs.Contains(funcName))
-				return 3;
-
-			throw new NotImplementedException();
-		}
-
 		byte GetPriority(string op)
 		{
 			switch (op)
@@ -107,6 +21,8 @@ namespace Calculator
 					return 2;
 				case "^":
 					return 3;
+				case "#":
+					return 4;
 				default:
 					return 0;
 			}
@@ -115,42 +31,61 @@ namespace Calculator
 		string[] Parse(string expr)
 		{
 			List<string> mainList = new List<string>(expr.Length);
-			StringBuilder numBuilder = new StringBuilder();
-			StringBuilder funcBuilder = new StringBuilder();
+			StringBuilder builder = new StringBuilder(expr.Length / 2);
 
-			foreach (char c in expr)
+			bool isFuncName = false;
+			for (int i = 0; i < expr.Length; i++)
 			{
+				char c = expr[i];
 				if (c == ' ') continue;
-				if (char.IsDigit(c) || c == '.' || (c == '-' || c == '+') && numBuilder.Length == 0)
+
+				if (isFuncName || (isFuncName = char.IsLetter(c)))
 				{
-					numBuilder.Append(c);
-					continue;
-				}
-				if (char.IsLetter(c))
-				{
-					funcBuilder.Append(c);
+					if (c == '(')
+					{
+						isFuncName = false;
+						mainList.Add(builder.ToString());
+						mainList.Add("(");
+						builder.Clear();
+						continue;
+					}
+					if (!char.IsLetterOrDigit(c))
+					{
+						isFuncName = false;
+						mainList.Add(builder.ToString());
+						builder.Clear();
+						i--;
+						continue;
+					}
+					builder.Append(c);
 					continue;
 				}
 
-				if (funcBuilder.Length != 0)
+
+				if (char.IsDigit(c) || c == '.')
 				{
-					mainList.Add(funcBuilder.ToString());
-					funcBuilder.Clear();
+					builder.Append(c);
+					continue;
 				}
-				if (numBuilder.Length != 0)
+
+				if (c == '-' && (i == 0 || expr[i - 1] != ')' && (builder.Length == 0 || !char.IsDigit(expr[i-1]) && expr[i+1] == '(')))
 				{
-					mainList.Add(numBuilder.ToString());
-					numBuilder.Clear();
+					c = '#';
 				}
-				if (c == ',') continue;
+
+				if (builder.Length != 0)
+				{
+					mainList.Add(builder.ToString());
+					builder.Clear();
+				}
 				mainList.Add(c.ToString());
 			}
-			if (numBuilder.Length != 0)
-				mainList.Add(numBuilder.ToString());
+			if (builder.Length != 0)
+				mainList.Add(builder.ToString());
 			return mainList.ToArray();
 		}
 
-		bool IsFunction(string token) => token.All(c => char.IsLetter(c));
+		bool IsFunction(string token) => token.Contains("log") || token.All(c => char.IsLetter(c));
 
 		string[] Create(string[] parsed)
 		{
@@ -160,7 +95,7 @@ namespace Calculator
 			string poped;
 			foreach (string token in parsed)
 			{
-				if (double.TryParse(token, out _))
+				if (IsMathConst(token, out _) || double.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
 				{
 					mainList.Add(token);
 					continue;
@@ -193,7 +128,7 @@ namespace Calculator
 				byte token_prty = GetPriority(token);
 				while (true)
 				{
-					if (opers.Count == 0) break;
+					if (opers.Count == 0 || opers.Peek() == "(") break;
 					poped = opers.Pop();
 					mainList.Add(poped);
 					if (GetPriority(poped) == token_prty) break;
@@ -212,20 +147,21 @@ namespace Calculator
 
 			foreach (string token in rpn)
 			{
-				if (double.TryParse(token, out double num))
+				if (IsMathConst(token, out double num) || double.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out num))
 				{
 					nums.Push(num);
 					continue;
 				}
 
+				if (token == "#")
+				{
+					nums.Push(-nums.Pop());
+					continue;
+				}
+
 				if (IsFunction(token))
 				{
-					int argsLen = GetFuncArgsLength(token);
-					double[] args = new double[argsLen];
-					for (int i = argsLen - 1; i >= 0; i--)
-						args[i] = nums.Pop();
-
-					nums.Push(CallFunc(token, args));
+					nums.Push(CallFunc(token, nums.Pop()));
 					continue;
 				}
 
@@ -235,24 +171,59 @@ namespace Calculator
 			return nums.Pop();
 		}
 
-		double CallFunc(string funcName, double[] args)
+		bool IsMathConst(string token, out double value)
 		{
+			switch (token)
+			{
+				case "pi":
+					value = Math.PI;
+					return true;
+				case "e":
+					value = Math.E;
+					return true;
+			}
+			value = 0;
+			return false;
+		}
+
+		double CallFunc(string funcName, double arg)
+		{
+			const double
+				NUM_TO_DEG = 57.295779513082,
+				NUM_TO_RAD = 0.017453292519943;
+
 			switch (funcName)
 			{
 				case "sin":
-					return Math.Sin(args[0]);
+					return Math.Sin(arg);
 				case "cos":
-					return Math.Cos(args[0]);
+					return Math.Cos(arg);
 				case "tg":
-					return Math.Tan(args[0]);
+				case "tan":
+					return Math.Tan(arg);
 				case "ctg":
-					return 1 / Math.Tan(args[0]);
+				case "cot":
+					return 1 / Math.Tan(arg);
+				case "deg":
+					return arg * NUM_TO_DEG;
+				case "rad":
+					return arg * NUM_TO_RAD;
 				case "abs":
-					return Math.Abs(args[0]);
-				case "min":
-					return Math.Min(args[0], args[1]);
-				case "max":
-					return Math.Max(args[0], args[1]);
+					return Math.Abs(arg);
+				case "sqrt":
+					return Math.Sqrt(arg);
+				case "exp":
+					return Math.Exp(arg);
+				case "log":
+				case "ln":
+					return Math.Log(arg);
+				case var _ when funcName.StartsWith("log"):
+					int logBase = int.Parse(funcName.Replace("log", ""));
+					return Math.Log(arg, logBase);
+				case "int":
+					return Math.Truncate(arg);
+				case "round":
+					return Math.Round(arg);
 			}
 
 			throw new NotImplementedException();
