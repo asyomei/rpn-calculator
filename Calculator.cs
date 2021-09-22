@@ -9,102 +9,110 @@ namespace Calculator
 {
 	class Calculator
 	{
+		bool IsFunction(string token) => token.All(c => char.IsLower(c));
+		bool IsConst(string token) => token.All(c => char.IsUpper(c));
+		
 		byte GetPriority(string op)
 		{
 			switch (op)
 			{
-				case "+":
-				case "-":
+				case "+": case "-":
 					return 1;
 				case "*":
 				case "/":
+				case "%":
 					return 2;
 				case "^":
-					return 3;
+				case "√":
 				case "#":
+					return 3;
+				case "~":
 					return 4;
-				default:
+				case "(":
 					return 0;
 			}
+			
+			throw new NotImplementedException();
 		}
-
+		
 		string[] Parse(string expr)
 		{
-			List<string> mainList = new List<string>(expr.Length);
-			StringBuilder builder = new StringBuilder(expr.Length / 2);
-
-			bool isFuncName = false;
+			List<string> main = new List<string>(expr.Length);
+			StringBuilder builder = new StringBuilder(16);
+			
 			for (int i = 0; i < expr.Length; i++)
 			{
 				char c = expr[i];
-				if (c == ' ') continue;
-
-				if (isFuncName || (isFuncName = char.IsLetter(c)))
-				{
-					if (c == '(')
-					{
-						isFuncName = false;
-						mainList.Add(builder.ToString());
-						mainList.Add("(");
-						builder.Clear();
-						continue;
-					}
-					if (!char.IsLetterOrDigit(c))
-					{
-						isFuncName = false;
-						mainList.Add(builder.ToString());
-						builder.Clear();
-						i--;
-						continue;
-					}
-					builder.Append(c);
-					continue;
-				}
-
-
-				if (char.IsDigit(c) || c == '.')
+				
+				if (char.IsLetterOrDigit(c) || c == '.')
 				{
 					builder.Append(c);
 					continue;
 				}
-
-				if (c == '-' && (i == 0 || expr[i - 1] != ')' && (builder.Length == 0 || !char.IsDigit(expr[i-1]) && expr[i+1] == '(')))
+				
+				if (c == '-' || c == '+' || c == '√')
 				{
-					c = '#';
+					// i = 0
+					// prev isn't ) and (letter or digit)
+					// next is (
+					
+					if (
+						i == 0 ||
+						(expr[i-1] != ')' && !char.IsLetterOrDigit(expr[i-1])) ||
+						expr[i+1] == '('
+					)
+					{
+						switch (c)
+						{
+							case '√': c = '#'; break;
+							case '+': continue;
+							case '-': c = '~'; break;
+						}
+					}
 				}
-
+				
 				if (builder.Length != 0)
 				{
-					mainList.Add(builder.ToString());
+					main.Add(builder.ToString());
 					builder.Clear();
 				}
-				mainList.Add(c.ToString());
+				main.Add(c.ToString());
 			}
 			if (builder.Length != 0)
-				mainList.Add(builder.ToString());
-			return mainList.ToArray();
+				main.Add(builder.ToString());
+			return main.ToArray();
 		}
-
-		bool IsFunction(string token) => token.Contains("log") || token.All(c => char.IsLetter(c));
-
+		
 		string[] Create(string[] parsed)
 		{
-			List<string> mainList = new List<string>(parsed.Length);
+			List<string> main = new List<string>(parsed.Length);
 			Stack<string> opers = new Stack<string>(parsed.Length);
-
+			
 			string poped;
 			foreach (string token in parsed)
 			{
-				if (IsMathConst(token, out _) || double.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+			//	Console.WriteLine("[{0}]", string.Join("|", main));
+			//	Console.WriteLine("[{0}]", string.Join("|", opers));
+			//	Console.WriteLine(token);
+				if (IsConst(token) || double.TryParse(token, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out _))
 				{
-					mainList.Add(token);
+					main.Add(token);
 					continue;
 				}
-				if (opers.Count == 0 || token == "(" || IsFunction(token))
+				
+				if (token == ",")
+				{
+					while (opers.Peek() != "(")
+						main.Add(opers.Pop());
+					continue;
+				}
+				
+				if (IsFunction(token) || token == "(" || opers.Count == 0)
 				{
 					opers.Push(token);
 					continue;
 				}
+				
 				if (token == ")")
 				{
 					while (true)
@@ -113,122 +121,177 @@ namespace Calculator
 						if (poped == "(")
 						{
 							if (opers.Count != 0 && IsFunction(opers.Peek()))
-								mainList.Add(opers.Pop());
+								main.Add(opers.Pop());
 							break;
 						}
-						mainList.Add(poped);
+						main.Add(poped);
 					}
 					continue;
 				}
-				if (GetPriority(opers.Peek()) < GetPriority(token) || opers.Peek() == "^" && token == "^")
+				
+				byte tokenPrty = GetPriority(token);
+				byte peekPrty = GetPriority(opers.FirstOrDefault(op => op != "~" && op != "#") ?? "(");
+				if (tokenPrty > peekPrty || tokenPrty >= 3 && peekPrty >= 3)
 				{
 					opers.Push(token);
 					continue;
 				}
-				byte token_prty = GetPriority(token);
-				while (true)
+				
+				while (opers.Count != 0 && opers.Peek() != "(")
 				{
-					if (opers.Count == 0 || opers.Peek() == "(") break;
 					poped = opers.Pop();
-					mainList.Add(poped);
-					if (GetPriority(poped) == token_prty) break;
+					main.Add(poped);
+					if (tokenPrty == GetPriority(poped)) break;
 				}
 				opers.Push(token);
 			}
 			while (opers.Count != 0)
-				mainList.Add(opers.Pop());
-			return mainList.ToArray();
+				main.Add(opers.Pop());
+			return main.ToArray();
 		}
-
+		
 		public double Evaluate(string expr)
 		{
+			if (string.IsNullOrWhiteSpace(expr))
+				return default;
+			
 			string[] rpn = Create(Parse(expr));
-			Stack<double> nums = new Stack<double>(rpn.Length / 2);
-
+			
+			Stack<double> nums = new Stack<double>(rpn.Length / 2 + 1);
 			foreach (string token in rpn)
 			{
-				if (IsMathConst(token, out double num) || double.TryParse(token, NumberStyles.Float, CultureInfo.InvariantCulture, out num))
+				if (TryGetConst(token, out double num) ||
+					double.TryParse(token, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out num))
 				{
 					nums.Push(num);
 					continue;
 				}
-
-				if (token == "#")
+				
+				if (token == "~")
 				{
 					nums.Push(-nums.Pop());
 					continue;
 				}
 
-				if (IsFunction(token))
+				if (token == "#")
 				{
-					nums.Push(CallFunc(token, nums.Pop()));
+					nums.Push(Math.Sqrt(nums.Pop()));
+				}
+				
+				double x = nums.Pop();
+				if (TryCallUnaryFunc(token, x, out double result))
+				{
+					nums.Push(result);
 					continue;
 				}
-
-				double y = nums.Pop(), x = nums.Pop();
-				nums.Push(DoOperation(x, y, token));
+				
+				double y = nums.Pop();
+				if (TryCallBinaryFunc(token, y, x, out result))
+				{
+					nums.Push(result);
+					continue;
+				}
+				nums.Push(DoOperation(y, x, token));
 			}
-			return nums.Pop();
+			return nums.Peek();
 		}
-
-		bool IsMathConst(string token, out double value)
+		
+		bool TryGetConst(string name, out double value)
 		{
-			switch (token)
+			switch (name)
 			{
-				case "pi":
+				case "PI":
 					value = Math.PI;
-					return true;
-				case "e":
+					break;
+				case "E":
 					value = Math.E;
-					return true;
+					break;
+				default:
+					value = default;
+					return false;
 			}
-			value = 0;
-			return false;
+			return true;
 		}
-
-		double CallFunc(string funcName, double arg)
+		
+		double Factorial(double n) => n < 2 ? 1 : (ulong) n * Factorial(n - 1);
+		bool TryCallUnaryFunc(string func, double x, out double result)
 		{
-			const double
-				NUM_TO_DEG = 57.295779513082,
-				NUM_TO_RAD = 0.017453292519943;
-
-			switch (funcName)
+			const double NUM_FOR_DEG = Math.PI / 180;
+			
+			switch (func)
 			{
+				case "sqrt":
+					result = Math.Sqrt(x);
+					break;
+				case "fact":
+					result = Factorial(x);
+					break;
 				case "sin":
-					return Math.Sin(arg);
+					result = Math.Sin(x * NUM_FOR_DEG);
+					break;
 				case "cos":
-					return Math.Cos(arg);
+					result = Math.Cos(x * NUM_FOR_DEG);
+					break;
 				case "tg":
 				case "tan":
-					return Math.Tan(arg);
+					result = Math.Tan(x * NUM_FOR_DEG);
+					break;
 				case "ctg":
 				case "cot":
-					return 1 / Math.Tan(arg);
-				case "deg":
-					return arg * NUM_TO_DEG;
-				case "rad":
-					return arg * NUM_TO_RAD;
-				case "abs":
-					return Math.Abs(arg);
-				case "sqrt":
-					return Math.Sqrt(arg);
-				case "exp":
-					return Math.Exp(arg);
-				case "log":
+					result = 1 / Math.Tan(x * NUM_FOR_DEG);
+					break;
 				case "ln":
-					return Math.Log(arg);
-				case var _ when funcName.StartsWith("log"):
-					int logBase = int.Parse(funcName.Replace("log", ""));
-					return Math.Log(arg, logBase);
+					result = Math.Log(x);
+					break;
+				case "abs":
+					result = Math.Abs(x);
+					break;
+				case "rad":
+					result = x / NUM_FOR_DEG;
+					break;
 				case "int":
-					return Math.Truncate(arg);
-				case "round":
-					return Math.Round(arg);
+					result = Math.Truncate(x);
+					break;
+				case "rnd":
+					result = Math.Round(x);
+					break;
+				case "sign":
+					result = Math.Sign(x);
+					break;
+				default:
+					result = default;
+					return false;
 			}
-
-			throw new NotImplementedException();
+			return true;
 		}
-
+		
+		readonly Lazy<Random> random = new Lazy<Random>();
+		bool TryCallBinaryFunc(string func, double x, double y, out double result)
+		{
+			switch (func)
+			{
+				case "root":
+					result = Math.Pow(y, 1 / x);
+					break;
+				case "min":
+					result = Math.Min(x, y);
+					break;
+				case "max":
+					result = Math.Max(x, y);
+					break;
+				case "log":
+					result = y == 10 ? Math.Log10(x) : Math.Log(y, x);
+					break;
+				case "rand":
+					result = random.Value.Next((int) x, (int) y);
+					break;
+				default:
+					result = default;
+					return false;
+			}
+			return true;
+		}
+		
 		double DoOperation(double x, double y, string op)
 		{
 			switch (op)
@@ -236,10 +299,12 @@ namespace Calculator
 				case "+": return x + y;
 				case "-": return x - y;
 				case "*": return x * y;
-				case "/": return x / y;
+				case "/": return y != 0 ? x / y : throw new DivideByZeroException();
+				case "%": return y != 0 ? x % y : throw new DivideByZeroException();
 				case "^": return Math.Pow(x, y);
+				case "√": return Math.Pow(y, 1 / x);
 			}
-
+			
 			throw new NotImplementedException();
 		}
 	}

@@ -12,57 +12,76 @@ namespace Calculator
 			InitializeComponent();
 		}
 
-		StringBuilder exprBuilder = new StringBuilder();
-		Calculator calc = new Calculator();
 		void Form1_Load(object sender, EventArgs e)
 		{
-			foreach (var btn in Controls.OfType<Button>())
-			{
-				switch (btn.Text)
-				{
-					case "=":
-						btn.Click += (s, a) => resTextBox.Text = calc.Evaluate(exprTextBox.Text).ToString();
-						continue;
-					case "B":
-						btn.Click += (s, a) => { if (exprBuilder.Length != 0) exprBuilder.Length--; };
-						break;
-					case "C":
-						btn.Click += (s, a) => exprBuilder.Clear();
-						break;
-					default:
-						btn.Click += (s, a) => exprBuilder.Append(btn.Text);
-						break;
-				}
-				btn.Click += (s, a) => exprTextBox.Text = exprBuilder.ToString();
-			}
+
 		}
 
-		string delims = "+-*/^().,";
-		void exprTextBox_KeyPress(object sender, KeyPressEventArgs e)
+		void Form1_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == (int)Keys.Enter)
+		//	input.Text += e.KeyChar;
+		}
+
+		void DefaultBtnClick(object sender, EventArgs e)
+		{
+			int selectStart = input.SelectionStart;
+			input.Focus();
+			string text = ((Button)sender).Text;
+			input.Text = input.Text.Insert(selectStart, text);
+			input.SelectionStart = selectStart + text.Length;
+			input.SelectionLength = 0;
+		}
+
+		void FunctionBtnClick(object sender, EventArgs e)
+		{
+			DefaultBtnClick(sender, null);
+			int selectStart = input.SelectionStart;
+			input.Focus();
+			input.Text = input.Text.Insert(selectStart, "(");
+			input.SelectionStart = selectStart + 1;
+			input.SelectionLength = 0;
+		}
+
+		Calculator calc = new Calculator();
+		void Input_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			bool IsMathSym(char c)
 			{
-				resTextBox.Text = calc.Evaluate(exprTextBox.Text).ToString();
-				e.KeyChar = '\0';
+				const string MATH_SYMS = ".,+-*/^√%()";
+				return char.IsLetterOrDigit(c) || MATH_SYMS.Contains(c);
+			}
+
+			if (e.KeyChar == (char)Keys.Enter)
+			{
+				Input_TextChanged(null, null);
 				e.Handled = true;
 				return;
 			}
 
-			if (e.KeyChar == (int)Keys.Back)
-			{
-				if (exprBuilder.Length != 0)
-					exprBuilder.Length--;
+			if (IsMathSym(e.KeyChar) || e.KeyChar == (char)Keys.Back || e.KeyChar == (char)Keys.Delete)
 				return;
-			}
 
-			if (char.IsLetterOrDigit(e.KeyChar) || delims.Contains(e.KeyChar))
-			{
-				exprBuilder.Append(e.KeyChar);
-				return;
-			}
-
-			e.KeyChar = '\0';
 			e.Handled = true;
+		}
+
+		void Input_TextChanged(object sender, EventArgs e)
+		{
+			double result;
+			try
+			{
+				result = calc.Evaluate(input.Text);
+			}
+			catch (Exception ex) when (ex is IndexOutOfRangeException || ex is InvalidOperationException || ex is NotImplementedException)
+			{
+				output.Text = "";
+				return;
+			}
+			catch (DivideByZeroException)
+			{
+				output.Text = "Деление на 0";
+				return;
+			}
+			output.Text = result.ToString();
 		}
 	}
 }

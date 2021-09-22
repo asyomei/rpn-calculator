@@ -38,18 +38,29 @@ namespace Calculator
 			System.Windows.Forms.Button btn7;
 			System.Windows.Forms.Button btn8;
 			System.Windows.Forms.Button btn9;
-			System.Windows.Forms.Button button1;
-			System.Windows.Forms.Button button2;
-			System.Windows.Forms.Button button3;
-			System.Windows.Forms.Button button4;
-			System.Windows.Forms.Button button5;
-			System.Windows.Forms.Button button6;
-			System.Windows.Forms.Button button7;
-			System.Windows.Forms.Button button8;
-			System.Windows.Forms.Button button9;
-			System.Windows.Forms.Button button10;
-			this.resTextBox = new System.Windows.Forms.TextBox();
-			this.exprTextBox = new System.Windows.Forms.TextBox();
+			System.Windows.Forms.Button btn0;
+			System.Windows.Forms.Button btnDot;
+			System.Windows.Forms.Button btnPercent;
+			System.Windows.Forms.Button btnLParen;
+			System.Windows.Forms.Button btnRParen;
+			System.Windows.Forms.Button btnDiv;
+			System.Windows.Forms.Button btnMul;
+			System.Windows.Forms.Button btnMinus;
+			System.Windows.Forms.Button btnPlus;
+			System.Windows.Forms.Button btnSqrt;
+			System.Windows.Forms.Button btnPow;
+			System.Windows.Forms.Button btnSin;
+			System.Windows.Forms.Button btnCos;
+			System.Windows.Forms.Button btnTan;
+			System.Windows.Forms.Button btnCotan;
+			System.Windows.Forms.Button btnAbs;
+			System.Windows.Forms.Button btnFact;
+			System.Windows.Forms.Button btnInt;
+			System.Windows.Forms.Button btnRound;
+			System.Windows.Forms.Button btnLog;
+			System.Windows.Forms.Button btnLn;
+			this.input = new System.Windows.Forms.TextBox();
+			this.output = new System.Windows.Forms.TextBox();
 			btn1 = new System.Windows.Forms.Button();
 			btn2 = new System.Windows.Forms.Button();
 			btn3 = new System.Windows.Forms.Button();
@@ -59,263 +70,407 @@ namespace Calculator
 			btn7 = new System.Windows.Forms.Button();
 			btn8 = new System.Windows.Forms.Button();
 			btn9 = new System.Windows.Forms.Button();
-			button1 = new System.Windows.Forms.Button();
-			button2 = new System.Windows.Forms.Button();
-			button3 = new System.Windows.Forms.Button();
-			button4 = new System.Windows.Forms.Button();
-			button5 = new System.Windows.Forms.Button();
-			button6 = new System.Windows.Forms.Button();
-			button7 = new System.Windows.Forms.Button();
-			button8 = new System.Windows.Forms.Button();
-			button9 = new System.Windows.Forms.Button();
-			button10 = new System.Windows.Forms.Button();
+			btn0 = new System.Windows.Forms.Button();
+			btnDot = new System.Windows.Forms.Button();
+			btnPercent = new System.Windows.Forms.Button();
+			btnLParen = new System.Windows.Forms.Button();
+			btnRParen = new System.Windows.Forms.Button();
+			btnDiv = new System.Windows.Forms.Button();
+			btnMul = new System.Windows.Forms.Button();
+			btnMinus = new System.Windows.Forms.Button();
+			btnPlus = new System.Windows.Forms.Button();
+			btnSqrt = new System.Windows.Forms.Button();
+			btnPow = new System.Windows.Forms.Button();
+			btnSin = new System.Windows.Forms.Button();
+			btnCos = new System.Windows.Forms.Button();
+			btnTan = new System.Windows.Forms.Button();
+			btnCotan = new System.Windows.Forms.Button();
+			btnAbs = new System.Windows.Forms.Button();
+			btnFact = new System.Windows.Forms.Button();
+			btnInt = new System.Windows.Forms.Button();
+			btnRound = new System.Windows.Forms.Button();
+			btnLog = new System.Windows.Forms.Button();
+			btnLn = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// btn1
 			// 
 			btn1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn1.Location = new System.Drawing.Point(107, 175);
-			btn1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn1.Location = new System.Drawing.Point(12, 234);
 			btn1.Name = "btn1";
-			btn1.Size = new System.Drawing.Size(45, 42);
-			btn1.TabIndex = 0;
+			btn1.Size = new System.Drawing.Size(35, 35);
+			btn1.TabIndex = 2;
 			btn1.Text = "1";
 			btn1.UseVisualStyleBackColor = true;
+			btn1.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn2
 			// 
 			btn2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn2.Location = new System.Drawing.Point(161, 175);
-			btn2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn2.Location = new System.Drawing.Point(53, 234);
 			btn2.Name = "btn2";
-			btn2.Size = new System.Drawing.Size(45, 42);
-			btn2.TabIndex = 1;
+			btn2.Size = new System.Drawing.Size(35, 35);
+			btn2.TabIndex = 3;
 			btn2.Text = "2";
 			btn2.UseVisualStyleBackColor = true;
+			btn2.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn3
 			// 
 			btn3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn3.Location = new System.Drawing.Point(215, 175);
-			btn3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn3.Location = new System.Drawing.Point(94, 234);
 			btn3.Name = "btn3";
-			btn3.Size = new System.Drawing.Size(45, 42);
-			btn3.TabIndex = 2;
+			btn3.Size = new System.Drawing.Size(35, 35);
+			btn3.TabIndex = 4;
 			btn3.Text = "3";
 			btn3.UseVisualStyleBackColor = true;
+			btn3.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn4
 			// 
 			btn4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn4.Location = new System.Drawing.Point(107, 225);
-			btn4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn4.Location = new System.Drawing.Point(12, 275);
 			btn4.Name = "btn4";
-			btn4.Size = new System.Drawing.Size(45, 42);
-			btn4.TabIndex = 3;
+			btn4.Size = new System.Drawing.Size(35, 35);
+			btn4.TabIndex = 5;
 			btn4.Text = "4";
 			btn4.UseVisualStyleBackColor = true;
+			btn4.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn5
 			// 
 			btn5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn5.Location = new System.Drawing.Point(161, 225);
-			btn5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn5.Location = new System.Drawing.Point(53, 275);
 			btn5.Name = "btn5";
-			btn5.Size = new System.Drawing.Size(45, 42);
-			btn5.TabIndex = 4;
+			btn5.Size = new System.Drawing.Size(35, 35);
+			btn5.TabIndex = 6;
 			btn5.Text = "5";
 			btn5.UseVisualStyleBackColor = true;
+			btn5.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn6
 			// 
 			btn6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn6.Location = new System.Drawing.Point(215, 225);
-			btn6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn6.Location = new System.Drawing.Point(94, 275);
 			btn6.Name = "btn6";
-			btn6.Size = new System.Drawing.Size(45, 42);
-			btn6.TabIndex = 5;
+			btn6.Size = new System.Drawing.Size(35, 35);
+			btn6.TabIndex = 7;
 			btn6.Text = "6";
 			btn6.UseVisualStyleBackColor = true;
+			btn6.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn7
 			// 
 			btn7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn7.Location = new System.Drawing.Point(107, 274);
-			btn7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn7.Location = new System.Drawing.Point(12, 316);
 			btn7.Name = "btn7";
-			btn7.Size = new System.Drawing.Size(45, 42);
-			btn7.TabIndex = 6;
+			btn7.Size = new System.Drawing.Size(35, 35);
+			btn7.TabIndex = 8;
 			btn7.Text = "7";
 			btn7.UseVisualStyleBackColor = true;
+			btn7.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn8
 			// 
 			btn8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn8.Location = new System.Drawing.Point(161, 274);
-			btn8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn8.Location = new System.Drawing.Point(53, 316);
 			btn8.Name = "btn8";
-			btn8.Size = new System.Drawing.Size(45, 42);
-			btn8.TabIndex = 7;
+			btn8.Size = new System.Drawing.Size(35, 35);
+			btn8.TabIndex = 9;
 			btn8.Text = "8";
 			btn8.UseVisualStyleBackColor = true;
+			btn8.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
 			// btn9
 			// 
 			btn9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btn9.Location = new System.Drawing.Point(215, 274);
-			btn9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			btn9.Location = new System.Drawing.Point(94, 316);
 			btn9.Name = "btn9";
-			btn9.Size = new System.Drawing.Size(45, 42);
-			btn9.TabIndex = 8;
+			btn9.Size = new System.Drawing.Size(35, 35);
+			btn9.TabIndex = 10;
 			btn9.Text = "9";
 			btn9.UseVisualStyleBackColor = true;
+			btn9.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button1
+			// btn0
 			// 
-			button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button1.Location = new System.Drawing.Point(321, 175);
-			button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(45, 42);
-			button1.TabIndex = 9;
-			button1.Text = "+";
-			button1.UseVisualStyleBackColor = true;
+			btn0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btn0.Location = new System.Drawing.Point(12, 357);
+			btn0.Name = "btn0";
+			btn0.Size = new System.Drawing.Size(35, 35);
+			btn0.TabIndex = 11;
+			btn0.Text = "0";
+			btn0.UseVisualStyleBackColor = true;
+			btn0.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button2
+			// btnDot
 			// 
-			button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button2.Location = new System.Drawing.Point(375, 175);
-			button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button2.Name = "button2";
-			button2.Size = new System.Drawing.Size(45, 42);
-			button2.TabIndex = 10;
-			button2.Text = "-";
-			button2.UseVisualStyleBackColor = true;
+			btnDot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnDot.Location = new System.Drawing.Point(53, 357);
+			btnDot.Name = "btnDot";
+			btnDot.Size = new System.Drawing.Size(35, 35);
+			btnDot.TabIndex = 12;
+			btnDot.Text = ".";
+			btnDot.UseVisualStyleBackColor = true;
+			btnDot.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button3
+			// btnPercent
 			// 
-			button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button3.Location = new System.Drawing.Point(321, 225);
-			button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button3.Name = "button3";
-			button3.Size = new System.Drawing.Size(45, 42);
-			button3.TabIndex = 11;
-			button3.Text = "*";
-			button3.UseVisualStyleBackColor = true;
+			btnPercent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnPercent.Location = new System.Drawing.Point(94, 357);
+			btnPercent.Name = "btnPercent";
+			btnPercent.Size = new System.Drawing.Size(35, 35);
+			btnPercent.TabIndex = 13;
+			btnPercent.Tag = "";
+			btnPercent.Text = "%";
+			btnPercent.UseVisualStyleBackColor = true;
+			btnPercent.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button4
+			// input
 			// 
-			button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button4.Location = new System.Drawing.Point(375, 225);
-			button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button4.Name = "button4";
-			button4.Size = new System.Drawing.Size(45, 42);
-			button4.TabIndex = 12;
-			button4.Text = "/";
-			button4.UseVisualStyleBackColor = true;
+			this.input.BackColor = System.Drawing.Color.White;
+			this.input.Location = new System.Drawing.Point(12, 43);
+			this.input.Multiline = true;
+			this.input.Name = "input";
+			this.input.Size = new System.Drawing.Size(301, 95);
+			this.input.TabIndex = 0;
+			this.input.TextChanged += new System.EventHandler(this.Input_TextChanged);
+			this.input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Input_KeyPress);
 			// 
-			// button5
+			// output
 			// 
-			button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button5.Location = new System.Drawing.Point(321, 274);
-			button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button5.Name = "button5";
-			button5.Size = new System.Drawing.Size(45, 42);
-			button5.TabIndex = 13;
-			button5.Text = "^";
-			button5.UseVisualStyleBackColor = true;
+			this.output.Location = new System.Drawing.Point(12, 144);
+			this.output.Name = "output";
+			this.output.ReadOnly = true;
+			this.output.Size = new System.Drawing.Size(301, 26);
+			this.output.TabIndex = 1;
+			this.output.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
-			// button6
+			// btnLParen
 			// 
-			button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button6.Location = new System.Drawing.Point(375, 274);
-			button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-			button6.Name = "button6";
-			button6.Size = new System.Drawing.Size(45, 42);
-			button6.TabIndex = 14;
-			button6.Text = "=";
-			button6.UseVisualStyleBackColor = true;
+			btnLParen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnLParen.Location = new System.Drawing.Point(12, 193);
+			btnLParen.Name = "btnLParen";
+			btnLParen.Size = new System.Drawing.Size(35, 35);
+			btnLParen.TabIndex = 15;
+			btnLParen.Text = "(";
+			btnLParen.UseVisualStyleBackColor = true;
+			btnLParen.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// resTextBox
+			// btnRParen
 			// 
-			this.resTextBox.Location = new System.Drawing.Point(107, 141);
-			this.resTextBox.Margin = new System.Windows.Forms.Padding(4);
-			this.resTextBox.Name = "resTextBox";
-			this.resTextBox.ReadOnly = true;
-			this.resTextBox.Size = new System.Drawing.Size(313, 26);
-			this.resTextBox.TabIndex = 16;
-			this.resTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			btnRParen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnRParen.Location = new System.Drawing.Point(53, 193);
+			btnRParen.Name = "btnRParen";
+			btnRParen.Size = new System.Drawing.Size(35, 35);
+			btnRParen.TabIndex = 16;
+			btnRParen.Text = ")";
+			btnRParen.UseVisualStyleBackColor = true;
+			btnRParen.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button7
+			// btnDiv
 			// 
-			button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button7.Location = new System.Drawing.Point(428, 175);
-			button7.Margin = new System.Windows.Forms.Padding(4);
-			button7.Name = "button7";
-			button7.Size = new System.Drawing.Size(45, 42);
-			button7.TabIndex = 18;
-			button7.Text = "B";
-			button7.UseVisualStyleBackColor = true;
+			btnDiv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnDiv.Location = new System.Drawing.Point(135, 234);
+			btnDiv.Name = "btnDiv";
+			btnDiv.Size = new System.Drawing.Size(35, 35);
+			btnDiv.TabIndex = 18;
+			btnDiv.Text = "/";
+			btnDiv.UseVisualStyleBackColor = true;
+			btnDiv.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button8
+			// btnMul
 			// 
-			button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button8.Location = new System.Drawing.Point(428, 225);
-			button8.Margin = new System.Windows.Forms.Padding(4);
-			button8.Name = "button8";
-			button8.Size = new System.Drawing.Size(45, 42);
-			button8.TabIndex = 19;
-			button8.Text = "C";
-			button8.UseVisualStyleBackColor = true;
+			btnMul.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnMul.Location = new System.Drawing.Point(135, 275);
+			btnMul.Name = "btnMul";
+			btnMul.Size = new System.Drawing.Size(35, 35);
+			btnMul.TabIndex = 19;
+			btnMul.Text = "*";
+			btnMul.UseVisualStyleBackColor = true;
+			btnMul.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button9
+			// btnMinus
 			// 
-			button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button9.Location = new System.Drawing.Point(32, 175);
-			button9.Margin = new System.Windows.Forms.Padding(4);
-			button9.Name = "button9";
-			button9.Size = new System.Drawing.Size(45, 42);
-			button9.TabIndex = 20;
-			button9.Text = "(";
-			button9.UseVisualStyleBackColor = true;
+			btnMinus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnMinus.Location = new System.Drawing.Point(135, 316);
+			btnMinus.Name = "btnMinus";
+			btnMinus.Size = new System.Drawing.Size(35, 35);
+			btnMinus.TabIndex = 20;
+			btnMinus.Text = "-";
+			btnMinus.UseVisualStyleBackColor = true;
+			btnMinus.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button10
+			// btnPlus
 			// 
-			button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button10.Location = new System.Drawing.Point(32, 225);
-			button10.Margin = new System.Windows.Forms.Padding(4);
-			button10.Name = "button10";
-			button10.Size = new System.Drawing.Size(45, 42);
-			button10.TabIndex = 21;
-			button10.Text = ")";
-			button10.UseVisualStyleBackColor = true;
+			btnPlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnPlus.Location = new System.Drawing.Point(135, 357);
+			btnPlus.Name = "btnPlus";
+			btnPlus.Size = new System.Drawing.Size(35, 35);
+			btnPlus.TabIndex = 21;
+			btnPlus.Text = "+";
+			btnPlus.UseVisualStyleBackColor = true;
+			btnPlus.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// exprTextBox
+			// btnSqrt
 			// 
-			this.exprTextBox.Location = new System.Drawing.Point(107, 13);
-			this.exprTextBox.Multiline = true;
-			this.exprTextBox.Name = "exprTextBox";
-			this.exprTextBox.Size = new System.Drawing.Size(313, 121);
-			this.exprTextBox.TabIndex = 22;
-			this.exprTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.exprTextBox_KeyPress);
+			btnSqrt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnSqrt.Location = new System.Drawing.Point(94, 193);
+			btnSqrt.Name = "btnSqrt";
+			btnSqrt.Size = new System.Drawing.Size(35, 35);
+			btnSqrt.TabIndex = 22;
+			btnSqrt.Tag = "";
+			btnSqrt.Text = "√";
+			btnSqrt.UseVisualStyleBackColor = true;
+			btnSqrt.Click += new System.EventHandler(this.DefaultBtnClick);
+			// 
+			// btnPow
+			// 
+			btnPow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnPow.Location = new System.Drawing.Point(135, 193);
+			btnPow.Name = "btnPow";
+			btnPow.Size = new System.Drawing.Size(35, 35);
+			btnPow.TabIndex = 23;
+			btnPow.Text = "^";
+			btnPow.UseVisualStyleBackColor = true;
+			btnPow.Click += new System.EventHandler(this.DefaultBtnClick);
+			// 
+			// btnSin
+			// 
+			btnSin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnSin.Location = new System.Drawing.Point(217, 193);
+			btnSin.Name = "btnSin";
+			btnSin.Size = new System.Drawing.Size(45, 35);
+			btnSin.TabIndex = 25;
+			btnSin.Text = "sin";
+			btnSin.UseVisualStyleBackColor = true;
+			btnSin.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnCos
+			// 
+			btnCos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnCos.Location = new System.Drawing.Point(268, 193);
+			btnCos.Name = "btnCos";
+			btnCos.Size = new System.Drawing.Size(45, 35);
+			btnCos.TabIndex = 26;
+			btnCos.Text = "cos";
+			btnCos.UseVisualStyleBackColor = true;
+			btnCos.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnTan
+			// 
+			btnTan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnTan.Location = new System.Drawing.Point(217, 234);
+			btnTan.Name = "btnTan";
+			btnTan.Size = new System.Drawing.Size(45, 35);
+			btnTan.TabIndex = 27;
+			btnTan.Text = "tg";
+			btnTan.UseVisualStyleBackColor = true;
+			btnTan.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnCotan
+			// 
+			btnCotan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnCotan.Location = new System.Drawing.Point(268, 234);
+			btnCotan.Name = "btnCotan";
+			btnCotan.Size = new System.Drawing.Size(45, 35);
+			btnCotan.TabIndex = 28;
+			btnCotan.Text = "ctg";
+			btnCotan.UseVisualStyleBackColor = true;
+			btnCotan.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnAbs
+			// 
+			btnAbs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnAbs.Location = new System.Drawing.Point(217, 316);
+			btnAbs.Name = "btnAbs";
+			btnAbs.Size = new System.Drawing.Size(45, 35);
+			btnAbs.TabIndex = 29;
+			btnAbs.Text = "abs";
+			btnAbs.UseVisualStyleBackColor = true;
+			btnAbs.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnFact
+			// 
+			btnFact.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnFact.Location = new System.Drawing.Point(268, 316);
+			btnFact.Name = "btnFact";
+			btnFact.Size = new System.Drawing.Size(45, 35);
+			btnFact.TabIndex = 30;
+			btnFact.Text = "fact";
+			btnFact.UseVisualStyleBackColor = true;
+			btnFact.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnInt
+			// 
+			btnInt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnInt.Location = new System.Drawing.Point(217, 357);
+			btnInt.Name = "btnInt";
+			btnInt.Size = new System.Drawing.Size(45, 35);
+			btnInt.TabIndex = 31;
+			btnInt.Text = "int";
+			btnInt.UseVisualStyleBackColor = true;
+			btnInt.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnRound
+			// 
+			btnRound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnRound.Location = new System.Drawing.Point(268, 357);
+			btnRound.Name = "btnRound";
+			btnRound.Size = new System.Drawing.Size(45, 35);
+			btnRound.TabIndex = 32;
+			btnRound.Text = "rnd";
+			btnRound.UseVisualStyleBackColor = true;
+			btnRound.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnLog
+			// 
+			btnLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnLog.Location = new System.Drawing.Point(217, 275);
+			btnLog.Name = "btnLog";
+			btnLog.Size = new System.Drawing.Size(45, 35);
+			btnLog.TabIndex = 33;
+			btnLog.Text = "log";
+			btnLog.UseVisualStyleBackColor = true;
+			btnLog.Click += new System.EventHandler(this.FunctionBtnClick);
+			// 
+			// btnLn
+			// 
+			btnLn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnLn.Location = new System.Drawing.Point(268, 275);
+			btnLn.Name = "btnLn";
+			btnLn.Size = new System.Drawing.Size(45, 35);
+			btnLn.TabIndex = 34;
+			btnLn.Text = "ln";
+			btnLn.UseVisualStyleBackColor = true;
+			btnLn.Click += new System.EventHandler(this.FunctionBtnClick);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(527, 329);
-			this.Controls.Add(this.exprTextBox);
-			this.Controls.Add(button10);
-			this.Controls.Add(button9);
-			this.Controls.Add(button8);
-			this.Controls.Add(button7);
-			this.Controls.Add(this.resTextBox);
-			this.Controls.Add(button6);
-			this.Controls.Add(button5);
-			this.Controls.Add(button4);
-			this.Controls.Add(button3);
-			this.Controls.Add(button2);
-			this.Controls.Add(button1);
+			this.ClientSize = new System.Drawing.Size(325, 404);
+			this.Controls.Add(btnLn);
+			this.Controls.Add(btnLog);
+			this.Controls.Add(btnRound);
+			this.Controls.Add(btnInt);
+			this.Controls.Add(btnFact);
+			this.Controls.Add(btnAbs);
+			this.Controls.Add(btnCotan);
+			this.Controls.Add(btnTan);
+			this.Controls.Add(btnCos);
+			this.Controls.Add(btnSin);
+			this.Controls.Add(btnPow);
+			this.Controls.Add(btnSqrt);
+			this.Controls.Add(btnPlus);
+			this.Controls.Add(btnMinus);
+			this.Controls.Add(btnMul);
+			this.Controls.Add(btnDiv);
+			this.Controls.Add(btnRParen);
+			this.Controls.Add(btnLParen);
+			this.Controls.Add(btnPercent);
+			this.Controls.Add(btnDot);
+			this.Controls.Add(btn0);
 			this.Controls.Add(btn9);
 			this.Controls.Add(btn8);
 			this.Controls.Add(btn7);
@@ -325,10 +480,15 @@ namespace Calculator
 			this.Controls.Add(btn3);
 			this.Controls.Add(btn2);
 			this.Controls.Add(btn1);
+			this.Controls.Add(this.output);
+			this.Controls.Add(this.input);
 			this.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Margin = new System.Windows.Forms.Padding(4);
+			this.MaximizeBox = false;
 			this.Name = "Form1";
-			this.Text = "Form1";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Калькулятор";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -336,8 +496,9 @@ namespace Calculator
 		}
 
 		#endregion
-		private System.Windows.Forms.TextBox resTextBox;
-		private System.Windows.Forms.TextBox exprTextBox;
+
+		private System.Windows.Forms.TextBox input;
+		private System.Windows.Forms.TextBox output;
 	}
 }
 
