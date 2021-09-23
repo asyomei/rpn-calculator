@@ -16,25 +16,27 @@ namespace Calculator
 		{
 			switch (op)
 			{
-				case "+": case "-":
+				case "+":
+				case "-":
 					return 1;
 				case "*":
 				case "/":
-				case "%":
 					return 2;
 				case "^":
 				case "√":
-				case "#":
+				case "#": // unary sqrt
 					return 3;
-				case "~":
+				case "~": // unary minus
 					return 4;
+				case "\\": // mod
+					return 5;
 				case "(":
 					return 0;
 			}
 			
 			throw new NotImplementedException();
 		}
-		
+
 		string[] Parse(string expr)
 		{
 			List<string> main = new List<string>(expr.Length);
@@ -91,9 +93,6 @@ namespace Calculator
 			string poped;
 			foreach (string token in parsed)
 			{
-			//	Console.WriteLine("[{0}]", string.Join("|", main));
-			//	Console.WriteLine("[{0}]", string.Join("|", opers));
-			//	Console.WriteLine(token);
 				if (IsConst(token) || double.TryParse(token, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out _))
 				{
 					main.Add(token);
@@ -167,17 +166,6 @@ namespace Calculator
 					continue;
 				}
 				
-				if (token == "~")
-				{
-					nums.Push(-nums.Pop());
-					continue;
-				}
-
-				if (token == "#")
-				{
-					nums.Push(Math.Sqrt(nums.Pop()));
-				}
-				
 				double x = nums.Pop();
 				if (TryCallUnaryFunc(token, x, out double result))
 				{
@@ -191,9 +179,9 @@ namespace Calculator
 					nums.Push(result);
 					continue;
 				}
-				nums.Push(DoOperation(y, x, token));
+				throw new NotImplementedException();
 			}
-			return nums.Peek();
+			return nums.Count != 1 ? throw new InvalidOperationException() : nums.Peek();
 		}
 		
 		bool TryGetConst(string name, out double value)
@@ -213,7 +201,19 @@ namespace Calculator
 			return true;
 		}
 		
-		double Factorial(double n) => n < 2 ? 1 : (ulong) n * Factorial(n - 1);
+		double Factorial(double x)
+		{
+			if (double.IsInfinity(x))
+				return double.PositiveInfinity;
+
+			double result = 1;
+			for (int i = (int)x; i > 1; i--)
+			{
+				result *= i;
+			}
+			return result;
+		}
+
 		bool TryCallUnaryFunc(string func, double x, out double result)
 		{
 			const double NUM_FOR_DEG = Math.PI / 180;
@@ -258,10 +258,19 @@ namespace Calculator
 				case "sign":
 					result = Math.Sign(x);
 					break;
+				// operations
+				case "~":
+					result = -x;
+					break;
+				case "#":
+					result = Math.Sqrt(x);
+					break;
 				default:
 					result = default;
 					return false;
 			}
+
+
 			return true;
 		}
 		
@@ -283,29 +292,39 @@ namespace Calculator
 					result = y == 10 ? Math.Log10(x) : Math.Log(y, x);
 					break;
 				case "rand":
-					result = random.Value.Next((int) x, (int) y);
+					result = random.Value.Next((int) Math.Min(x, y), (int) Math.Max(x, y));
+					break;
+				// operations
+				case "+":
+					result = x + y;
+					break;
+				case "-":
+					result = x - y;
+					break;
+				case "*":
+					result = x * y;
+					break;
+				case "/":
+					if (y == 0)
+						throw new DivideByZeroException();
+					result = x / y;
+					break;
+				case "\\":
+					if (y == 0)
+						throw new DivideByZeroException();
+					result = x % y;
+					break;
+				case "^":
+					result = Math.Pow(x, y);
+					break;
+				case "√":
+					result = Math.Pow(y, 1 / x);
 					break;
 				default:
 					result = default;
 					return false;
 			}
 			return true;
-		}
-		
-		double DoOperation(double x, double y, string op)
-		{
-			switch (op)
-			{
-				case "+": return x + y;
-				case "-": return x - y;
-				case "*": return x * y;
-				case "/": return y != 0 ? x / y : throw new DivideByZeroException();
-				case "%": return y != 0 ? x % y : throw new DivideByZeroException();
-				case "^": return Math.Pow(x, y);
-				case "√": return Math.Pow(y, 1 / x);
-			}
-			
-			throw new NotImplementedException();
 		}
 	}
 }
