@@ -65,11 +65,16 @@ namespace Calculator
 			System.Windows.Forms.Button btnMax;
 			System.Windows.Forms.Button btnRandom;
 			System.Windows.Forms.Button btnDelim;
-			System.Windows.Forms.Button button1;
+			System.Windows.Forms.Button btnBack;
+			System.Windows.Forms.Button btnSetM;
+			System.Windows.Forms.Label memLbl;
+			System.Windows.Forms.Button btnMem;
+			System.Windows.Forms.Button btnEval;
 			this.input = new System.Windows.Forms.TextBox();
 			this.output = new System.Windows.Forms.TextBox();
 			this.functionPanel = new System.Windows.Forms.Panel();
 			this.closeFunctionPanelHelper = new System.Windows.Forms.Label();
+			this.memValueLbl = new System.Windows.Forms.Label();
 			btn1 = new System.Windows.Forms.Button();
 			btn2 = new System.Windows.Forms.Button();
 			btn3 = new System.Windows.Forms.Button();
@@ -106,7 +111,11 @@ namespace Calculator
 			btnMax = new System.Windows.Forms.Button();
 			btnRandom = new System.Windows.Forms.Button();
 			btnDelim = new System.Windows.Forms.Button();
-			button1 = new System.Windows.Forms.Button();
+			btnBack = new System.Windows.Forms.Button();
+			btnSetM = new System.Windows.Forms.Button();
+			memLbl = new System.Windows.Forms.Label();
+			btnMem = new System.Windows.Forms.Button();
+			btnEval = new System.Windows.Forms.Button();
 			this.functionPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -243,7 +252,7 @@ namespace Calculator
 			btnMod.Size = new System.Drawing.Size(35, 35);
 			btnMod.TabIndex = 13;
 			btnMod.Tag = "";
-			btnMod.Text = "\\";
+			btnMod.Text = ":";
 			btnMod.UseVisualStyleBackColor = true;
 			btnMod.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
@@ -513,16 +522,36 @@ namespace Calculator
 			btnDelim.UseVisualStyleBackColor = true;
 			btnDelim.Click += new System.EventHandler(this.DefaultBtnClick);
 			// 
-			// button1
+			// btnBack
 			// 
-			button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			button1.Location = new System.Drawing.Point(176, 234);
-			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(35, 35);
-			button1.TabIndex = 41;
-			button1.Text = "<";
-			button1.UseVisualStyleBackColor = true;
-			button1.Click += new System.EventHandler(this.BackBtnClick);
+			btnBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnBack.Location = new System.Drawing.Point(176, 234);
+			btnBack.Name = "btnBack";
+			btnBack.Size = new System.Drawing.Size(35, 35);
+			btnBack.TabIndex = 41;
+			btnBack.Text = "<";
+			btnBack.UseVisualStyleBackColor = true;
+			btnBack.Click += new System.EventHandler(this.BackBtnClick);
+			// 
+			// btnSetM
+			// 
+			btnSetM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnSetM.Location = new System.Drawing.Point(118, 179);
+			btnSetM.Name = "btnSetM";
+			btnSetM.Size = new System.Drawing.Size(50, 35);
+			btnSetM.TabIndex = 40;
+			btnSetM.Text = "M=";
+			btnSetM.UseVisualStyleBackColor = true;
+			btnSetM.Click += new System.EventHandler(this.MemoryBtnClicked);
+			// 
+			// memLbl
+			// 
+			memLbl.AutoSize = true;
+			memLbl.Location = new System.Drawing.Point(12, 22);
+			memLbl.Name = "memLbl";
+			memLbl.Size = new System.Drawing.Size(34, 18);
+			memLbl.TabIndex = 44;
+			memLbl.Text = "M =";
 			// 
 			// input
 			// 
@@ -548,6 +577,7 @@ namespace Calculator
 			// 
 			this.functionPanel.BackColor = System.Drawing.SystemColors.Control;
 			this.functionPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.functionPanel.Controls.Add(btnSetM);
 			this.functionPanel.Controls.Add(btnSin);
 			this.functionPanel.Controls.Add(btnCos);
 			this.functionPanel.Controls.Add(btnSign);
@@ -576,13 +606,50 @@ namespace Calculator
 			this.closeFunctionPanelHelper.TabIndex = 43;
 			this.closeFunctionPanelHelper.MouseEnter += new System.EventHandler(this.FunctionPanel_MouseLeave);
 			// 
+			// memValueLbl
+			// 
+			this.memValueLbl.AutoSize = true;
+			this.memValueLbl.Location = new System.Drawing.Point(45, 22);
+			this.memValueLbl.Name = "memValueLbl";
+			this.memValueLbl.Size = new System.Drawing.Size(17, 18);
+			this.memValueLbl.TabIndex = 45;
+			this.memValueLbl.Text = "0";
+			// 
+			// btnMem
+			// 
+			btnMem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnMem.Location = new System.Drawing.Point(176, 316);
+			btnMem.Name = "btnMem";
+			btnMem.Size = new System.Drawing.Size(35, 35);
+			btnMem.TabIndex = 46;
+			btnMem.Tag = "";
+			btnMem.Text = "M";
+			btnMem.UseVisualStyleBackColor = true;
+			btnMem.Click += new System.EventHandler(this.DefaultBtnClick);
+			// 
+			// btnEval
+			// 
+			btnEval.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			btnEval.Location = new System.Drawing.Point(176, 357);
+			btnEval.Name = "btnEval";
+			btnEval.Size = new System.Drawing.Size(35, 35);
+			btnEval.TabIndex = 47;
+			btnEval.Tag = "";
+			btnEval.Text = "=";
+			btnEval.UseVisualStyleBackColor = true;
+			btnEval.Click += new System.EventHandler(this.Input_TextChanged);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(230, 404);
+			this.ClientSize = new System.Drawing.Size(232, 404);
+			this.Controls.Add(this.memValueLbl);
+			this.Controls.Add(memLbl);
 			this.Controls.Add(this.functionPanel);
-			this.Controls.Add(button1);
+			this.Controls.Add(btnBack);
+			this.Controls.Add(btnMem);
+			this.Controls.Add(btnEval);
 			this.Controls.Add(btnDelim);
 			this.Controls.Add(btnClear);
 			this.Controls.Add(btnPow);
@@ -628,6 +695,7 @@ namespace Calculator
 		private System.Windows.Forms.TextBox output;
 		private System.Windows.Forms.Panel functionPanel;
 		private System.Windows.Forms.Label closeFunctionPanelHelper;
+		private System.Windows.Forms.Label memValueLbl;
 	}
 }
 

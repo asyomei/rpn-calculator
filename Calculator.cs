@@ -11,7 +11,7 @@ namespace Calculator
 	{
 		bool IsFunction(string token) => token.All(c => char.IsLower(c));
 		bool IsConst(string token) => token.All(c => char.IsUpper(c));
-		
+
 		byte GetPriority(string op)
 		{
 			switch (op)
@@ -28,7 +28,7 @@ namespace Calculator
 					return 3;
 				case "~": // unary minus
 					return 4;
-				case "\\": // mod
+				case ":": // mod
 					return 5;
 				case "(":
 					return 0;
@@ -52,16 +52,15 @@ namespace Calculator
 					continue;
 				}
 				
-				if (c == '-' || c == '+' || c == '√')
+				if ("√-+".Contains(c))
 				{
 					// i = 0
-					// prev isn't ) and (letter or digit)
-					// next is (
+					// [ prev isn't ')' or next is '(' ] and [ prev isn't letter or digit ] and [ prev isn't '(' and next isn't '(' ]
 					
 					if (
 						i == 0 ||
-						(expr[i-1] != ')' && !char.IsLetterOrDigit(expr[i-1])) ||
-						expr[i+1] == '('
+						(expr[i-1] != ')' || expr[i+1] == '(') && !char.IsLetterOrDigit(expr[i-1]) &&
+						(expr[i-1] != ')' && expr[i+1] != '(')
 					)
 					{
 						switch (c)
@@ -183,6 +182,8 @@ namespace Calculator
 			}
 			return nums.Count != 1 ? throw new InvalidOperationException() : nums.Peek();
 		}
+
+		public double Memory { get; set; }
 		
 		bool TryGetConst(string name, out double value)
 		{
@@ -193,6 +194,9 @@ namespace Calculator
 					break;
 				case "E":
 					value = Math.E;
+					break;
+				case "M":
+					value = Memory;
 					break;
 				default:
 					value = default;
@@ -206,7 +210,7 @@ namespace Calculator
 			if (double.IsInfinity(x))
 				return double.PositiveInfinity;
 
-			double result = 1;
+			int result = 1;
 			for (int i = (int)x; i > 1; i--)
 			{
 				result *= i;
@@ -216,8 +220,6 @@ namespace Calculator
 
 		bool TryCallUnaryFunc(string func, double x, out double result)
 		{
-			const double NUM_FOR_DEG = Math.PI / 180;
-			
 			switch (func)
 			{
 				case "sqrt":
@@ -226,28 +228,11 @@ namespace Calculator
 				case "fact":
 					result = Factorial(x);
 					break;
-				case "sin":
-					result = Math.Sin(x * NUM_FOR_DEG);
-					break;
-				case "cos":
-					result = Math.Cos(x * NUM_FOR_DEG);
-					break;
-				case "tg":
-				case "tan":
-					result = Math.Tan(x * NUM_FOR_DEG);
-					break;
-				case "ctg":
-				case "cot":
-					result = 1 / Math.Tan(x * NUM_FOR_DEG);
-					break;
 				case "ln":
 					result = Math.Log(x);
 					break;
 				case "abs":
 					result = Math.Abs(x);
-					break;
-				case "rad":
-					result = x / NUM_FOR_DEG;
 					break;
 				case "int":
 					result = Math.Truncate(x);
@@ -266,10 +251,34 @@ namespace Calculator
 					result = Math.Sqrt(x);
 					break;
 				default:
-					result = default;
-					return false;
+					// trigonometry
+					double angle = x * Math.PI / 180;
+					bool is90 = x % 180 == 90;
+					switch (func)
+					{
+						case "sin":
+							result = Math.Sin(angle);
+							break;
+						case "cos":
+							result = is90 ? 0 : Math.Cos(angle);
+							break;
+						case "tg":
+						case "tan":
+							result = is90 ? throw new DivideByZeroException() : Math.Tan(angle);
+							break;
+						case "cot":
+						case "ctg":
+							double mod180 = x % 180;
+							if (mod180 == 0 || mod180 == 180)
+								throw new DivideByZeroException();
+							result = 1 / Math.Tan(angle);
+							break;
+						default:
+							result = default;
+							return false;
+					}
+					break;
 			}
-
 
 			return true;
 		}
@@ -309,7 +318,7 @@ namespace Calculator
 						throw new DivideByZeroException();
 					result = x / y;
 					break;
-				case "\\":
+				case ":":
 					if (y == 0)
 						throw new DivideByZeroException();
 					result = x % y;

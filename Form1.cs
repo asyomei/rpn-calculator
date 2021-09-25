@@ -64,12 +64,24 @@ namespace Calculator
 			input.SelectionLength = 0;
 		}
 
+		bool TryGetResult(out double result) => double.TryParse(output.Text, out result);
+		void MemoryBtnClicked(object sender, EventArgs e)
+		{
+			if (TryGetResult(out double result))
+			{
+				calc.Memory = result;
+				memValueLbl.Text = output.Text;
+			}
+			FunctionPanel_MouseLeave(null, null);
+			input.Focus();
+		}
+
 		Calculator calc = new Calculator();
 		void Input_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			bool IsMathSym(char c)
 			{
-				const string MATH_SYMS = ".,+-*/^√!%()";
+				const string MATH_SYMS = ".,+-*/^√:()";
 				return char.IsLetterOrDigit(c) || MATH_SYMS.Contains(c);
 			}
 
